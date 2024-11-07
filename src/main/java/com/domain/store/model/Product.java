@@ -24,7 +24,7 @@ public class Product {
     private int inventory;
     private String description;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn
     @JsonBackReference
     private Category category;

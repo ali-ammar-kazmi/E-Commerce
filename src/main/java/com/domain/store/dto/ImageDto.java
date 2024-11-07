@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ImageDto {
     private Long imageId;
-    private String imageName;
+    private String fileName;
     private String downloadUrl;
 }

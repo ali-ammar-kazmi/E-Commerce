@@ -39,7 +39,7 @@ public class ImageService implements IImageService{
             imageRepository.save(image);
             ImageDto imageDto = new ImageDto();
             imageDto.setImageId(image.getId());
-            imageDto.setImageName(image.getFileName());
+            imageDto.setFileName(image.getFileName());
             imageDto.setDownloadUrl(image.getDownloadUrl());
             return imageDto;
         } catch (IOException | SQLException | ResourceNotFoundException e){
@@ -72,7 +72,7 @@ public class ImageService implements IImageService{
 
                 ImageDto dto = new ImageDto();
                 dto.setImageId(savedImage.getId());
-                dto.setImageName(savedImage.getFileName());
+                dto.setFileName(savedImage.getFileName());
                 dto.setDownloadUrl(savedImage.getDownloadUrl());
                 imageDtos.add(dto);
 

@@ -19,7 +19,7 @@ public class Image {
     @Lob
     private Blob image;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn
     private Product product;
 }
