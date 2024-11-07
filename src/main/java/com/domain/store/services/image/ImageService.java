@@ -1,7 +1,7 @@
 package com.domain.store.services.image;
 
 import com.domain.store.dto.ImageDto;
-import com.domain.store.exception.ResourceNotFoundException;
+import com.domain.store.exception.FoundException;
 import com.domain.store.model.Image;
 import com.domain.store.model.Product;
 import com.domain.store.repository.ImageRepository;
@@ -26,7 +26,7 @@ public class ImageService implements IImageService{
 
     @Override
     public Image getImageById(Long id) {
-        return imageRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Image Not Found with id: "+ id));
+        return imageRepository.findById(id).orElseThrow(()-> new FoundException("Image Not Found with id: "+ id));
     }
 
     @Override
@@ -42,14 +42,14 @@ public class ImageService implements IImageService{
             imageDto.setFileName(image.getFileName());
             imageDto.setDownloadUrl(image.getDownloadUrl());
             return imageDto;
-        } catch (IOException | SQLException | ResourceNotFoundException e){
+        } catch (IOException | SQLException | FoundException e){
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public void deleteImage(Long id) {
-        imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, ()-> {throw new ResourceNotFoundException("Image Not Found with id: " + id);});
+        imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, ()-> {throw new FoundException("Image Not Found with id: " + id);});
     }
 
     @Override

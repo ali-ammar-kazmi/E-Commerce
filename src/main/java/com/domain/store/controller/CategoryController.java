@@ -1,6 +1,7 @@
 package com.domain.store.controller;
 
 import com.domain.store.dto.CategoryDto;
+import com.domain.store.exception.FoundException;
 import com.domain.store.model.Category;
 import com.domain.store.response.ApiResponse;
 import com.domain.store.services.category.ICategoryService;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,7 +25,7 @@ public class CategoryController {
             List<Category> categories = categoryService.getAllCategories();
             return ResponseEntity.ok(new ApiResponse("Found All!", categories));
         } catch ( Exception e){
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         }
     }
 
@@ -33,6 +34,8 @@ public class CategoryController {
         try{
             CategoryDto category = categoryService.addCategory(categoryName);
             return ResponseEntity.ok(new ApiResponse("Category Added!", category));
+        } catch ( FoundException e){
+            return ResponseEntity.status(FOUND).body(new ApiResponse(e.getMessage(), FOUND));
         } catch ( Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
         }
@@ -43,6 +46,8 @@ public class CategoryController {
         try{
             Category category = categoryService.getCategoryById(categoryId);
             return ResponseEntity.ok(new ApiResponse("Category Found!", category));
+        } catch ( FoundException e){
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch ( Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
         }
@@ -53,6 +58,8 @@ public class CategoryController {
         try{
             Category category = categoryService.getCategoryByName(categoryName);
             return ResponseEntity.ok(new ApiResponse("Category Found!", category));
+        } catch ( FoundException e){
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch ( Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
         }
@@ -63,6 +70,8 @@ public class CategoryController {
         try{
             Category category = categoryService.updateCategory(categoryName, categoryId);
             return ResponseEntity.ok(new ApiResponse("Category Updated!", category));
+        } catch ( FoundException e){
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch ( Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
         }
@@ -73,10 +82,10 @@ public class CategoryController {
         try{
             categoryService.deleteCategory(categoryId);
             return ResponseEntity.ok(new ApiResponse("Category Deleted!", null));
+        } catch ( FoundException e){
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch ( Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
         }
     }
-
-
 }

@@ -1,7 +1,7 @@
 package com.domain.store.services.product;
 
 import com.domain.store.dto.CategoryDto;
-import com.domain.store.exception.ResourceNotFoundException;
+import com.domain.store.exception.FoundException;
 import com.domain.store.model.Category;
 import com.domain.store.model.Product;
 import com.domain.store.repository.ProductRepository;
@@ -23,7 +23,7 @@ public class ProductService implements IProductService{
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Product Not Found!"));
+                .orElseThrow(()-> new FoundException("Product Not Found!"));
     }
 
     @Override
@@ -58,13 +58,13 @@ public class ProductService implements IProductService{
                     productRepository.save(existingProduct);
                     return existingProduct;
                 })
-                .orElseThrow(()-> new ResourceNotFoundException("Product Not Found!"));
+                .orElseThrow(()-> new FoundException("Product Not Found!"));
     }
 
     @Override
     public void deleteProduct(long id) {
         productRepository.findById(id)
-                .ifPresentOrElse(productRepository::delete, ()-> {throw new ResourceNotFoundException("Product Not Found!");});
+                .ifPresentOrElse(productRepository::delete, ()-> {throw new FoundException("Product Not Found!");});
     }
 
     @Override
