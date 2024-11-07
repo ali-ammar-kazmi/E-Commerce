@@ -23,25 +23,29 @@ public class ProductService implements IProductService{
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(()-> new FoundException("Product Not Found!"));
+                .orElseThrow(()-> new FoundException("Product Not Found with id: "+ id));
     }
 
     @Override
     public Product addProduct(ProductRequest request) {
-        Category category = Optional.ofNullable(categoryService.getCategoryByName(request.getCategoryName()))
-                .orElseGet(()-> {
-                    CategoryDto categoryDto = categoryService.addCategory(request.getCategoryName());
-                    return categoryService.getCategoryByName(categoryDto.getCategoryName());
-                });
+        try {
+            Category category = Optional.ofNullable(categoryService.getCategoryByName(request.getCategoryName()))
+                    .orElseGet(()-> {
+                        CategoryDto categoryDto = categoryService.addCategory(request.getCategoryName());
+                        return categoryService.getCategoryByName(categoryDto.getCategoryName());
+                    });
 
-        Product product = new Product();
-        product.setName(request.getName());
-        product.setBrand(request.getBrand());
-        product.setPrice(request.getPrice());
-        product.setInventory(request.getInventory());
-        product.setDescription(request.getDescription());
-        product.setCategory(category);
-        return productRepository.save(product);
+            Product product = new Product();
+            product.setName(request.getName());
+            product.setBrand(request.getBrand());
+            product.setPrice(request.getPrice());
+            product.setInventory(request.getInventory());
+            product.setDescription(request.getDescription());
+            product.setCategory(category);
+            return productRepository.save(product);
+        } catch (Exception e) {
+            throw new FoundException("Product Not Added!");
+        }
     }
 
     @Override
@@ -55,16 +59,15 @@ public class ProductService implements IProductService{
                     existingProduct.setDescription(request.getDescription());
                     Category category = categoryService.getCategoryByName(request.getCategoryName());
                     existingProduct.setCategory(category);
-                    productRepository.save(existingProduct);
-                    return existingProduct;
+                    return productRepository.save(existingProduct);
                 })
-                .orElseThrow(()-> new FoundException("Product Not Found!"));
+                .orElseThrow(()-> new FoundException("Product Not Found with id: "+ id));
     }
 
     @Override
     public void deleteProduct(long id) {
         productRepository.findById(id)
-                .ifPresentOrElse(productRepository::delete, ()-> {throw new FoundException("Product Not Found!");});
+                .ifPresentOrElse(productRepository::delete, ()-> {throw new FoundException("Product Not Found with id: "+ id);});
     }
 
     @Override
@@ -89,12 +92,17 @@ public class ProductService implements IProductService{
     }
 
     @Override
+    public List<Product> getProductsByCategoryAndName(String category, String name) {
+        return productRepository.findByCategoryNameAndName(category, name);
+    }
+
+    @Override
     public List<Product> getProductsByName(String name) {
         return productRepository.findByName(name);
     }
 
     @Override
-    public int countProductsByBrandAndName(String brand, String Name) {
-        return productRepository.findByBrandAndName(brand, Name).size();
+    public int countProductsByCategory(String categoryName) {
+        return productRepository.findByCategoryName(categoryName).size();
     }
 }

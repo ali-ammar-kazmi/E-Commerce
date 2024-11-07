@@ -1,6 +1,7 @@
 package com.domain.store.controller;
 
 import com.domain.store.dto.ImageDto;
+import com.domain.store.exception.FoundException;
 import com.domain.store.model.Image;
 import com.domain.store.response.ApiResponse;
 import com.domain.store.services.image.IImageService;
@@ -27,7 +28,9 @@ public class ImageController {
         try{
             List<ImageDto> imageDtos = imageService.saveImages(files, productId);
             return ResponseEntity.ok(new ApiResponse("Image Upload Success!", imageDtos));
-        }catch (Exception e){
+        } catch ( FoundException e){
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+        } catch (Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Image Upload Failed!", e.getMessage()));
         }
     }
@@ -39,7 +42,9 @@ public class ImageController {
             ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
             return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"").body(resource);
-        }catch (Exception e){
+        } catch ( FoundException e){
+            return ResponseEntity.status(NOT_FOUND).body(null);
+        } catch (Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -53,7 +58,7 @@ public class ImageController {
                 return ResponseEntity.ok(new ApiResponse("Update Success!", imageDto));
             }
         } catch (Exception e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", INTERNAL_SERVER_ERROR));
     }
@@ -67,7 +72,7 @@ public class ImageController {
                 return ResponseEntity.ok(new ApiResponse("Delete Success!", null));
             }
         } catch (Exception e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete Failed!", INTERNAL_SERVER_ERROR));
     }

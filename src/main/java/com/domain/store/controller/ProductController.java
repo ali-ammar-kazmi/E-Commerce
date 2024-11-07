@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor
 @RestController
@@ -74,7 +75,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByCategory(categoryName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
     }
 
@@ -85,7 +86,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByBrand(brandName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
     }
 
@@ -95,7 +96,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByName(productName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
     }
 
@@ -105,17 +106,27 @@ public class ProductController {
             List<Product> products = productService.getProductsByCategoryAndBrand(categoryName, brandName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
     }
 
-    @GetMapping("/brand/{brandName}/name/{productName}")
-    public ResponseEntity<ApiResponse> countProductsByBrandAndName(@PathVariable String brandName, @PathVariable String productName){
+    @GetMapping("/categoryName/{categoryName}")
+    public ResponseEntity<ApiResponse> countProductsByBrandAndName(@PathVariable String categoryName){
         try {
-            int count = productService.countProductsByBrandAndName(brandName, productName);
+            int count = productService.countProductsByCategory(categoryName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", count));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/category/{categoryName}/product/{productName}")
+    public ResponseEntity<ApiResponse> getProductsByCategoryAndProductName(@PathVariable String categoryName, @PathVariable String productName){
+        try {
+            List<Product> products = productService.getProductsByCategoryAndName(categoryName, productName);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", products));
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
     }
 }

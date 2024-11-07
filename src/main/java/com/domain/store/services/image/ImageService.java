@@ -43,7 +43,7 @@ public class ImageService implements IImageService{
             imageDto.setDownloadUrl(image.getDownloadUrl());
             return imageDto;
         } catch (IOException | SQLException | FoundException e){
-            throw new RuntimeException(e.getMessage());
+            throw new FoundException(e.getMessage());
         }
     }
 
@@ -68,7 +68,6 @@ public class ImageService implements IImageService{
                 String downloadUrl = buildUrl + image.getId();
                 image.setDownloadUrl(downloadUrl);
                 Image savedImage = imageRepository.save(image);
-
 
                 ImageDto dto = new ImageDto();
                 dto.setImageId(savedImage.getId());
