@@ -6,19 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
-public class Category {
+public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private BigDecimal totalOrderPrice = BigDecimal.ZERO;
 
-    @OneToMany(mappedBy="category", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy= "cart", cascade= CascadeType.ALL, orphanRemoval= true)
     @JsonManagedReference
-    private List<Product> products;
+    private List<CartItem> cartItems;
 }

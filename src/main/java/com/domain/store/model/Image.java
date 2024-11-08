@@ -1,5 +1,6 @@
 package com.domain.store.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.sql.Blob;
 @Entity
 public class Image {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fileName;
     private String fileType;
@@ -21,5 +22,6 @@ public class Image {
 
     @ManyToOne
     @JoinColumn
+    @JsonBackReference
     private Product product;
 }

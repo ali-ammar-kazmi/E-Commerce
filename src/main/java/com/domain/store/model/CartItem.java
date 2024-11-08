@@ -8,32 +8,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.math.BigInteger;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class Product {
+public class CartItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String brand;
-    private BigDecimal price;
-    private int inventory;
-    private String description;
+    private BigInteger quantity = BigInteger.ONE;
+    private BigDecimal totalPrice;
 
     @ManyToOne
     @JoinColumn
     @JsonBackReference
-    private Category category;
+    private Cart cart;
 
-    @OneToMany(mappedBy="product",cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy= "cartItem", cascade= CascadeType.ALL)
     @JsonManagedReference
-    private List<Image> images;
-
-    @OneToOne
-    @JsonBackReference
-    private CartItem cartItem;
+    @JoinColumn
+    private Product product;
 }
