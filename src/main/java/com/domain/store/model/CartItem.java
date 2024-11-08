@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 @Getter
 @Setter
@@ -19,7 +18,8 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigInteger quantity = BigInteger.ONE;
+    private int quantity;
+    private BigDecimal unitPrice;
     private BigDecimal totalPrice;
 
     @ManyToOne
@@ -27,8 +27,16 @@ public class CartItem {
     @JsonBackReference
     private Cart cart;
 
-    @OneToOne(mappedBy= "cartItem", cascade= CascadeType.ALL)
+    @ManyToOne
     @JsonManagedReference
     @JoinColumn
     private Product product;
+
+    public void setUnitPrice() {
+        this.unitPrice = this.product.getPrice();
+    }
+
+    public void setTotalPrice() {
+        this.totalPrice = this.unitPrice.multiply(new BigDecimal(this.quantity));
+    }
 }

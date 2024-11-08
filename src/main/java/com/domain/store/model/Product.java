@@ -33,7 +33,7 @@ public class Product {
     @JsonManagedReference
     private List<Image> images;
 
-    @OneToOne
+    @OneToMany
     @JsonBackReference
-    private CartItem cartItem;
+    private List<CartItem> cartItem;
 }

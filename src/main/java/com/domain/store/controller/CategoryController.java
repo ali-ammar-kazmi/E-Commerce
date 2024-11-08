@@ -2,6 +2,7 @@ package com.domain.store.controller;
 
 import com.domain.store.dto.CategoryDto;
 import com.domain.store.exception.FoundException;
+import com.domain.store.helper.ConvertToDto;
 import com.domain.store.model.Category;
 import com.domain.store.response.ApiResponse;
 import com.domain.store.services.category.ICategoryService;
@@ -18,12 +19,14 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("${api.prefix}/category")
 public class CategoryController {
     private final ICategoryService categoryService;
+    private final ConvertToDto convert;
 
     @GetMapping("/retrieve/all")
     public ResponseEntity<ApiResponse> getAllCategories(){
         try{
             List<Category> categories = categoryService.getAllCategories();
-            return ResponseEntity.ok(new ApiResponse("Found All!", categories));
+            List<CategoryDto> categoryDto = convert.convertCategoryToDtos(categories);
+            return ResponseEntity.ok(new ApiResponse("Found All!", categoryDto));
         } catch ( Exception e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         }
@@ -32,8 +35,9 @@ public class CategoryController {
     @PostMapping("/save/{categoryName}")
     public ResponseEntity<ApiResponse> addCategory(@PathVariable String categoryName){
         try{
-            CategoryDto category = categoryService.addCategory(categoryName);
-            return ResponseEntity.ok(new ApiResponse("Category Added!", category));
+            Category category = categoryService.addCategory(categoryName);
+            CategoryDto categoryDto = convert.convertCategoryToDto(category);
+            return ResponseEntity.ok(new ApiResponse("Category Added!", categoryDto));
         } catch ( FoundException e){
             return ResponseEntity.status(FOUND).body(new ApiResponse(e.getMessage(), FOUND));
         } catch ( Exception e){
@@ -45,7 +49,8 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long categoryId){
         try{
             Category category = categoryService.getCategoryById(categoryId);
-            return ResponseEntity.ok(new ApiResponse("Category Found!", category));
+            CategoryDto categoryDto = convert.convertCategoryToDto(category);
+            return ResponseEntity.ok(new ApiResponse("Category Found!", categoryDto));
         } catch ( FoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch ( Exception e) {
@@ -57,7 +62,8 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String categoryName){
         try{
             Category category = categoryService.getCategoryByName(categoryName);
-            return ResponseEntity.ok(new ApiResponse("Category Found!", category));
+            CategoryDto categoryDto = convert.convertCategoryToDto(category);
+            return ResponseEntity.ok(new ApiResponse("Category Found!", categoryDto));
         } catch ( FoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch ( Exception e) {
@@ -69,7 +75,8 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable String categoryName, @PathVariable Long categoryId){
         try{
             Category category = categoryService.updateCategory(categoryName, categoryId);
-            return ResponseEntity.ok(new ApiResponse("Category Updated!", category));
+            CategoryDto categoryDto = convert.convertCategoryToDto(category);
+            return ResponseEntity.ok(new ApiResponse("Category Updated!", categoryDto));
         } catch ( FoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch ( Exception e) {

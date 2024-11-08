@@ -1,5 +1,7 @@
 package com.domain.store.controller;
 
+import com.domain.store.dto.ProductDto;
+import com.domain.store.helper.ConvertToDto;
 import com.domain.store.model.Product;
 import com.domain.store.request.ProductRequest;
 import com.domain.store.response.ApiResponse;
@@ -18,12 +20,14 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("${api.prefix}/product")
 public class ProductController {
     private final IProductService productService;
+    private final ConvertToDto convert;
 
     @PostMapping("/save")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody ProductRequest productRequest){
         try {
             Product product = productService.addProduct(productRequest);
-            return ResponseEntity.ok(new ApiResponse("Save Success!", product));
+            ProductDto productDto = convert.convertProductToDto(product);
+            return ResponseEntity.ok(new ApiResponse("Save Success!", productDto));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Save Failed!", e.getMessage()));
         }
@@ -33,7 +37,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long productId){
         try {
             Product product = productService.updateProduct(productRequest, productId);
-            return ResponseEntity.ok(new ApiResponse("Update Success!", product));
+            ProductDto productDto = convert.convertProductToDto(product);
+            return ResponseEntity.ok(new ApiResponse("Update Success!", productDto));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", e.getMessage()));
         }
@@ -53,7 +58,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId){
         try {
             Product product = productService.getProductById(productId);
-            return ResponseEntity.ok(new ApiResponse("Found Success!", product));
+            ProductDto productDto = convert.convertProductToDto(product);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", productDto));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
@@ -63,7 +69,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getAllProducts(){
         try {
             List<Product> products = productService.getAllProducts();
-            return ResponseEntity.ok(new ApiResponse("Found Success!", products));
+            List<ProductDto> productDtos = convert.convertProductToDtos(products);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
@@ -73,7 +80,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String categoryName){
         try {
             List<Product> products = productService.getProductsByCategory(categoryName);
-            return ResponseEntity.ok(new ApiResponse("Found Success!", products));
+            List<ProductDto> productDtos = convert.convertProductToDtos(products);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
@@ -84,7 +92,8 @@ public class ProductController {
         System.out.println(brandName);
         try {
             List<Product> products = productService.getProductsByBrand(brandName);
-            return ResponseEntity.ok(new ApiResponse("Found Success!", products));
+            List<ProductDto> productDtos = convert.convertProductToDtos(products);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
@@ -94,7 +103,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String productName){
         try {
             List<Product> products = productService.getProductsByName(productName);
-            return ResponseEntity.ok(new ApiResponse("Found Success!", products));
+            List<ProductDto> productDtos = convert.convertProductToDtos(products);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
@@ -104,7 +114,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String categoryName, @PathVariable String brandName){
         try {
             List<Product> products = productService.getProductsByCategoryAndBrand(categoryName, brandName);
-            return ResponseEntity.ok(new ApiResponse("Found Success!", products));
+            List<ProductDto> productDtos = convert.convertProductToDtos(products);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
@@ -124,7 +135,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductsByCategoryAndProductName(@PathVariable String categoryName, @PathVariable String productName){
         try {
             List<Product> products = productService.getProductsByCategoryAndName(categoryName, productName);
-            return ResponseEntity.ok(new ApiResponse("Found Success!", products));
+            List<ProductDto> productDtos = convert.convertProductToDtos(products);
+            return ResponseEntity.ok(new ApiResponse("Found Success!", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
         }
