@@ -6,7 +6,6 @@ import com.domain.store.dto.ProductDto;
 import com.domain.store.model.Category;
 import com.domain.store.model.Product;
 import com.domain.store.repository.ImageRepository;
-import com.domain.store.services.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ import java.util.List;
 public class ConvertToDto {
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
-    private final IProductService productService;
 
     public List<ProductDto> convertProductToDtos(List<Product> products){
         return products.stream().map(this::convertProductToDto).toList();
