@@ -18,32 +18,41 @@ public class CartItemService implements ICartItemService {
     private final ProductService productService;
 
     @Override
-    public CartItem addCartItem(Long cartId, Long productId) {
-        CartItem newCartItem = new CartItem();
-        newCartItem.setCart(cartService.getOrderCart(cartId));
-        newCartItem.setProduct(productService.getProductById(productId));
-        newCartItem.setUnitPrice();
-        newCartItem.setTotalPrice();
-        return cartItemRepository.save(newCartItem);
+    public CartItem addItemToCart(Long cartId, Long productId) {
+        try {
+            if (cartItemRepository.existsByCartIdAndProductId(cartId, productId)){
+                CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cartId, productId);
+                cartItem.setQuantity(cartItem.getQuantity()+1);
+                cartItem.setPrice();
+                return cartItemRepository.save(cartItem);
+            }
+            CartItem newCartItem = new CartItem();
+            newCartItem.setCart(cartService.getOrderCart(cartId));
+            newCartItem.setProduct(productService.getProductById(productId));
+            newCartItem.setPrice();
+            return cartItemRepository.save(newCartItem);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public CartItem getCartItem(Long id) {
-        return cartItemRepository.findById(id).orElseThrow(()-> new FoundException("CartItem Not Found with id: " + id));
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(()-> new FoundException("CartItem Not Found with id: " + id));
+        cartItem.setPrice();
+        return cartItem;
     }
 
     @Override
     public CartItem updateQuantity(Long id, int quantity) {
-        return null;
-//        return cartItemRepository.findById(id).map((cartItem)->{
-//            int oldQuantity = cartItem.getQuantity();
-//            cartItem.setQuantity(oldQuantity + quantity);
-//            return cartItemRepository.save(oldQuantity);
-//        }).orElseThrow(), ()-> {throw new FoundException("CartItem Not Found with id: " + id);});
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(()-> new FoundException("CartItem Not Found with id: " + id));
+        cartItem.setQuantity(cartItem.getQuantity()+quantity);
+        cartItem.setPrice();
+        return cartItemRepository.save(cartItem);
     }
 
     @Override
     public void deleteCartItem(Long id) {
-
+        cartItemRepository.findById(id).ifPresentOrElse(cartItemRepository::delete, ()-> { throw new FoundException("CartItem Not Found with id: " + id);});
     }
 }

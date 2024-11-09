@@ -23,4 +23,9 @@ public class Cart {
     @OneToMany(mappedBy= "cart", cascade= CascadeType.ALL, orphanRemoval= true)
     @JsonManagedReference
     private Set<CartItem> cartItems;
+
+    public Cart setTotalAmount(){
+        this.totalAmount = this.cartItems.stream().map(CartItem::getTotalPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
+        return this;
+    }
 }

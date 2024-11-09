@@ -1,6 +1,7 @@
 package com.domain.store.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,11 +30,11 @@ public class Product {
     @JsonBackReference
     private Category category;
 
-    @OneToMany(mappedBy="product",cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="product", cascade=CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ImageConfig> images;
 
-    @OneToMany
-    @JsonBackReference
+    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
+    @JsonIgnore
     private List<CartItem> cartItem;
 }
