@@ -1,27 +1,25 @@
 package com.domain.store.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Blob;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fileName;
-    private String fileType;
-    private String downloadUrl;
+
     @Lob
     private Blob image;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn
-    @JsonBackReference
-    private Product product;
+    private ImageConfig imageConfig;
 }

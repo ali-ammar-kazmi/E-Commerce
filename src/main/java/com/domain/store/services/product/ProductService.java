@@ -3,12 +3,10 @@ package com.domain.store.services.product;
 import com.domain.store.exception.FoundException;
 import com.domain.store.model.Category;
 import com.domain.store.model.Product;
-import com.domain.store.repository.ImageRepository;
 import com.domain.store.repository.ProductRepository;
 import com.domain.store.request.ProductRequest;
 import com.domain.store.services.category.CategoryService;
 import lombok.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +18,6 @@ import java.util.Optional;
 public class ProductService implements IProductService{
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
-    private final ModelMapper modelMapper;
-    private final ImageRepository imageRepository;
 
     @Override
     public Product getProductById(Long id) {

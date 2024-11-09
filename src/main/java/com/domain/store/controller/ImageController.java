@@ -1,8 +1,7 @@
 package com.domain.store.controller;
 
-import com.domain.store.dto.ImageDto;
 import com.domain.store.exception.FoundException;
-import com.domain.store.model.Image;
+import com.domain.store.model.ImageConfig;
 import com.domain.store.response.ApiResponse;
 import com.domain.store.services.image.IImageService;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +25,8 @@ public class ImageController {
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId){
         try{
-            List<ImageDto> imageDtos = imageService.saveImages(files, productId);
-            return ResponseEntity.ok(new ApiResponse("Image Upload Success!", imageDtos));
+            List<ImageConfig> images = imageService.saveImages(files, productId);
+            return ResponseEntity.ok(new ApiResponse("Image Upload Success!", images));
         } catch ( FoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch (Exception e){
@@ -38,8 +37,8 @@ public class ImageController {
     @GetMapping("/download/{imageId}")
     public ResponseEntity<ByteArrayResource> downloadImage(@PathVariable Long imageId){
         try{
-            Image image = imageService.getImageById(imageId);
-            ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
+            ImageConfig image = imageService.getImageById(imageId);
+            ByteArrayResource resource = new ByteArrayResource(image.getImage().getImage().getBytes(1, (int) image.getImage().getImage().length()));
             return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"").body(resource);
         } catch ( FoundException e){
@@ -52,10 +51,10 @@ public class ImageController {
     @PutMapping("/update/{imageId}")
     public ResponseEntity<ApiResponse> updateImage(@RequestParam MultipartFile file, @PathVariable Long imageId){
         try{
-            Image image = imageService.getImageById(imageId);
+            ImageConfig image = imageService.getImageById(imageId);
             if (image != null){
-                ImageDto imageDto = imageService.updateImage(file, imageId);
-                return ResponseEntity.ok(new ApiResponse("Update Success!", imageDto));
+                ImageConfig updatedImage = imageService.updateImage(file, imageId);
+                return ResponseEntity.ok(new ApiResponse("Update Success!", updatedImage));
             }
         } catch (Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
@@ -66,7 +65,7 @@ public class ImageController {
     @DeleteMapping("/delete/{imageId}")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId){
         try{
-            Image image = imageService.getImageById(imageId);
+            ImageConfig image = imageService.getImageById(imageId);
             if (image != null){
                 imageService.deleteImage(imageId);
                 return ResponseEntity.ok(new ApiResponse("Delete Success!", null));

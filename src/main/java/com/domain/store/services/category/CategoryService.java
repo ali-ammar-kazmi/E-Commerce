@@ -6,7 +6,6 @@ import com.domain.store.repository.CategoryRepository;
 import com.domain.store.repository.ProductRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService{
     private final CategoryRepository categoryRepository;
-    private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
 
     @Override

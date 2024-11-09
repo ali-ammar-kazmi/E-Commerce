@@ -31,7 +31,7 @@ public class Product {
 
     @OneToMany(mappedBy="product",cascade=CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Image> images;
+    private List<ImageConfig> images;
 
     @OneToMany
     @JsonBackReference

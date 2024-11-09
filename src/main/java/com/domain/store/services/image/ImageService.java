@@ -1,10 +1,10 @@
 package com.domain.store.services.image;
 
-import com.domain.store.dto.ImageDto;
 import com.domain.store.exception.FoundException;
 import com.domain.store.model.Image;
+import com.domain.store.model.ImageConfig;
 import com.domain.store.model.Product;
-import com.domain.store.repository.ImageRepository;
+import com.domain.store.repository.ImageConfigRepository;
 import com.domain.store.services.product.ProductService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -21,27 +21,24 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ImageService implements IImageService{
-    private final ImageRepository imageRepository;
+    private final ImageConfigRepository imageConfigRepository;
     private final ProductService productService;
 
     @Override
-    public Image getImageById(Long id) {
-        return imageRepository.findById(id).orElseThrow(()-> new FoundException("Image Not Found with id: "+ id));
+    public ImageConfig getImageById(Long id) {
+        return imageConfigRepository.findById(id).orElseThrow(()-> new FoundException("Image Not Found with id: "+ id));
     }
 
     @Override
-    public ImageDto updateImage(MultipartFile file, Long id) {
+    public ImageConfig updateImage(MultipartFile file, Long id) {
         try{
-            Image image = getImageById(id);
-            image.setFileName(file.getOriginalFilename());
-            image.setFileType(file.getContentType());
+            ImageConfig imageConfig = getImageById(id);
+            imageConfig.setFileName(file.getOriginalFilename());
+            imageConfig.setFileType(file.getContentType());
+            Image image = imageConfig.getImage();
             image.setImage(new SerialBlob(file.getBytes()));
-            imageRepository.save(image);
-            ImageDto imageDto = new ImageDto();
-            imageDto.setImageId(image.getId());
-            imageDto.setFileName(image.getFileName());
-            imageDto.setDownloadUrl(image.getDownloadUrl());
-            return imageDto;
+            imageConfig.setImage(image);
+            return imageConfigRepository.save(imageConfig);
         } catch (IOException | SQLException | FoundException e){
             throw new FoundException(e.getMessage());
         }
@@ -49,36 +46,33 @@ public class ImageService implements IImageService{
 
     @Override
     public void deleteImage(Long id) {
-        imageRepository.findById(id).ifPresentOrElse(imageRepository::delete, ()-> {throw new FoundException("Image Not Found with id: " + id);});
+        imageConfigRepository.findById(id).ifPresentOrElse(imageConfigRepository::delete, ()-> {throw new FoundException("Image Not Found with id: " + id);});
     }
 
     @Override
-    public List<ImageDto> saveImages(List<MultipartFile> files, Long id) {
+    public List<ImageConfig> saveImages(List<MultipartFile> files, Long id) {
         Product product = productService.getProductById(id);
-        List<ImageDto> imageDtos = new ArrayList<>();
+        List<ImageConfig> images = new ArrayList<>();
         for (MultipartFile file : files) {
             try {
+                ImageConfig imageConfig = new ImageConfig();
+                imageConfig.setFileName(file.getOriginalFilename());
+                imageConfig.setFileType(file.getContentType());
                 Image image = new Image();
-                image.setFileName(file.getOriginalFilename());
-                image.setFileType(file.getContentType());
                 image.setImage(new SerialBlob(file.getBytes()));
-                image.setProduct(product);
-                imageRepository.save(image);
+                imageConfig.setImage(image);
+                imageConfig.setProduct(product);
+                imageConfigRepository.save(imageConfig);
                 String buildUrl = "/api/v1/image/download/";
                 String downloadUrl = buildUrl + image.getId();
-                image.setDownloadUrl(downloadUrl);
-                Image savedImage = imageRepository.save(image);
-
-                ImageDto dto = new ImageDto();
-                dto.setImageId(savedImage.getId());
-                dto.setFileName(savedImage.getFileName());
-                dto.setDownloadUrl(savedImage.getDownloadUrl());
-                imageDtos.add(dto);
-
+                imageConfig.setDownloadUrl(downloadUrl);
+                image.setImageConfig(imageConfig);
+                ImageConfig savedImage = imageConfigRepository.save(imageConfig);
+                images.add(savedImage);
             } catch (IOException | SQLException e) {
                 throw new RuntimeException(e.getMessage());
             }
         }
-        return imageDtos;
+        return images;
     }
 }
