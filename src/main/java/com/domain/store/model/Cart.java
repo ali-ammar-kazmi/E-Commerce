@@ -24,8 +24,7 @@ public class Cart {
     @JsonManagedReference
     private Set<CartItem> cartItems;
 
-    public Cart setTotalAmount(){
-        this.totalAmount = this.cartItems.stream().map(CartItem::getTotalPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
-        return this;
+    public void setTotalAmount(){
+        this.totalAmount = this.cartItems.stream().map(CartItem::getPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
     }
 }

@@ -7,6 +7,7 @@ import com.domain.store.repository.CartRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -26,7 +27,9 @@ public class CartService implements ICartService{
 
     @Override
     public Cart getOrderCart(Long id) {
-        return cartRepository.findById(id).stream().map(Cart::setTotalAmount).toList().get(0);
+        Cart cart = cartRepository.findById(id).orElseThrow(()-> new FoundException("Cart Not Found with id: " + id));
+        cart.setTotalAmount();
+        return cartRepository.save(cart);
     }
 
     @Override
@@ -34,9 +37,12 @@ public class CartService implements ICartService{
         cartRepository.findById(id).ifPresentOrElse(cartRepository::delete, ()-> {throw new FoundException("Cart Not Found with id: " + id);});
     }
 
+    @Transactional
     @Override
     public void clearCart(Long id) {
-        getOrderCart(id).getCartItems()
-                .forEach(cartItemRepository::delete);
+        Cart cart = getOrderCart(id);
+        cart.getCartItems().forEach(cartItemRepository::delete);
+        cart.getCartItems().clear();
+        cartRepository.save(cart);
     }
 }

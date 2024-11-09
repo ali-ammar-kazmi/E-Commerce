@@ -40,12 +40,12 @@ public class CartItemService implements ICartItemService {
     public CartItem getCartItem(Long id) {
         CartItem cartItem = cartItemRepository.findById(id).orElseThrow(()-> new FoundException("CartItem Not Found with id: " + id));
         cartItem.setPrice();
-        return cartItem;
+        return cartItemRepository.save(cartItem);
     }
 
     @Override
     public CartItem updateQuantity(Long id, int quantity) {
-        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(()-> new FoundException("CartItem Not Found with id: " + id));
+        CartItem cartItem = getCartItem(id);
         cartItem.setQuantity(cartItem.getQuantity()+quantity);
         cartItem.setPrice();
         return cartItemRepository.save(cartItem);

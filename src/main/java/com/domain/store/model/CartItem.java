@@ -1,7 +1,6 @@
 package com.domain.store.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,11 +29,16 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+    @JsonManagedReference
     private Product product;
 
     public void setPrice() {
         this.unitPrice = this.product.getPrice();
         this.totalPrice = this.unitPrice.multiply(new BigDecimal(this.quantity));
+    }
+
+    public BigDecimal getPrice() {
+        setPrice();
+        return this.totalPrice;
     }
 }
