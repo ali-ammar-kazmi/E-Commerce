@@ -1,5 +1,6 @@
 package com.domain.store.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,7 +25,12 @@ public class Cart {
     @JsonManagedReference
     private Set<CartItem> cartItems;
 
+    @OneToOne
+    @JoinColumn
+    @JsonBackReference
+    private User user;
+
     public void setTotalAmount(){
-        this.totalAmount = this.cartItems.stream().map(CartItem::getPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
+        this.totalAmount = this.cartItems.stream().map(CartItem::getTotalPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
     }
 }

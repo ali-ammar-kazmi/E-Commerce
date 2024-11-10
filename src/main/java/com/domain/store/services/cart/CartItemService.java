@@ -32,7 +32,7 @@ public class CartItemService implements ICartItemService {
             newCartItem.setPrice();
             return cartItemRepository.save(newCartItem);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new FoundException(e.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class CartItemService implements ICartItemService {
     @Override
     public CartItem updateQuantity(Long id, int quantity) {
         CartItem cartItem = getCartItem(id);
-        cartItem.setQuantity(cartItem.getQuantity()+quantity);
+        cartItem.setQuantity(cartItem.getQuantity() + quantity);
         cartItem.setPrice();
         return cartItemRepository.save(cartItem);
     }

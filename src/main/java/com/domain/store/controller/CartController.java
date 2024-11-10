@@ -21,10 +21,10 @@ public class CartController {
     private final CartService cartService;
     private final CartItemService cartItemService;
 
-    @GetMapping("/save")
-    public ResponseEntity<ApiResponse> saveCart(){
+    @GetMapping("/save/user-id/{userId}")
+    public ResponseEntity<ApiResponse> saveCart(@PathVariable Long userId){
         try {
-            Cart cart = cartService.addOrderCart();
+            Cart cart = cartService.addOrderCart(userId);
             return ResponseEntity.ok(new ApiResponse("Cart Created!", cart));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
@@ -44,8 +44,8 @@ public class CartController {
     @DeleteMapping("/clear/{cartId}")
     public ResponseEntity<ApiResponse> clearCart(@PathVariable Long cartId){
         try {
-            cartService.clearCart(cartId);
-            return ResponseEntity.ok(new ApiResponse("Clear success!", null));
+            Cart cart = cartService.clearCart(cartId);
+            return ResponseEntity.ok(new ApiResponse("Clear success!", cart));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         }

@@ -1,5 +1,6 @@
 package com.domain.store.model;
 
+import com.domain.store.services.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -8,40 +9,30 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class CartItem {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int quantity=1;
-    private BigDecimal unitPrice;
+    private LocalDateTime orderDateTime;
+    private BigDecimal orderAmount;
 
-    @ManyToOne
-    @JoinColumn
-    @JsonBackReference
-    private Cart cart;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
-    @ManyToOne
-    @JoinColumn
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Product product;
+    private Set<CartItem> cartItems;
 
     @ManyToOne
     @JoinColumn
     @JsonBackReference
-    private Order order;
-
-    public void setPrice() {
-        this.unitPrice = this.product.getPrice();
-    }
-
-    public BigDecimal getTotalPrice() {
-        setPrice();
-        return this.unitPrice.multiply(new BigDecimal(this.quantity));
-    }
+    private User user;
 }
