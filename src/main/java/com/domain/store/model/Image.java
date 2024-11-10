@@ -10,10 +10,10 @@ import java.sql.Blob;
 @Setter
 @Entity
 public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Lob
     private Blob image;
 

@@ -7,11 +7,9 @@ import com.domain.store.model.User;
 import com.domain.store.repository.CartItemRepository;
 import com.domain.store.repository.CartRepository;
 import com.domain.store.repository.OrderRepository;
-import com.domain.store.repository.UserRepository;
 import com.domain.store.services.OrderStatus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +22,11 @@ public class CartService implements ICartService{
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
     @Override
-    public Cart addOrderCart(Long userId) {
+    public Cart addOrderCart(User user) {
         Cart newCart = new Cart();
-        User user = userRepository.findById(userId).orElseThrow(()-> new FoundException("User Not Found with id: " + userId));
         newCart.setUser(user);
         return cartRepository.save(newCart);
     }

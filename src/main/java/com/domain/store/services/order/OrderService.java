@@ -5,8 +5,8 @@ import com.domain.store.model.Cart;
 import com.domain.store.model.Order;
 import com.domain.store.model.User;
 import com.domain.store.repository.OrderRepository;
-import com.domain.store.repository.UserRepository;
 import com.domain.store.services.OrderStatus;
+import com.domain.store.services.user.IUserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 public class OrderService implements IOrderService {
 
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+    private final IUserService userService;
 
     @Override
-    public Order orderPlaced(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()-> new FoundException("User not found with Id: "+ userId));
+    public Order placeOrder(Long userId) {
+        User user = userService.getUser(userId);
         Cart cart = user.getCart();
         Order order = new Order();
         order.setOrderAmount(cart.getTotalAmount());
@@ -37,5 +37,12 @@ public class OrderService implements IOrderService {
     @Override
     public Order getOrder(Long id) {
         return orderRepository.findById(id).orElseThrow(()-> new FoundException("Order not found with Id: "+id));
+    }
+
+    @Override
+    public Order updateOrderStatus(Long id, OrderStatus status) {
+        Order order = getOrder(id);
+        order.setOrderStatus(status);
+        return orderRepository.save(order);
     }
 }

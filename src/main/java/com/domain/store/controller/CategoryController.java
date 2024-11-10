@@ -44,7 +44,6 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long categoryId){
         try{
             Category category = categoryService.getCategoryById(categoryId);
-//            CategoryDto categoryDto = convert.convertCategoryToDto(category);
             return ResponseEntity.ok(new ApiResponse("Category Found!", category));
         } catch ( FoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));

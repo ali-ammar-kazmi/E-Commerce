@@ -21,16 +21,6 @@ public class CartController {
     private final CartService cartService;
     private final CartItemService cartItemService;
 
-    @GetMapping("/save/user-id/{userId}")
-    public ResponseEntity<ApiResponse> saveCart(@PathVariable Long userId){
-        try {
-            Cart cart = cartService.addOrderCart(userId);
-            return ResponseEntity.ok(new ApiResponse("Cart Created!", cart));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
-        }
-    }
-
     @GetMapping("/retrieve/{cartId}")
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId){
         try {

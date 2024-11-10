@@ -1,8 +1,11 @@
 package com.domain.store.services.user;
 
 import com.domain.store.exception.FoundException;
+import com.domain.store.model.Cart;
 import com.domain.store.model.User;
 import com.domain.store.repository.UserRepository;
+import com.domain.store.request.UserRequest;
+import com.domain.store.services.cart.ICartService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,15 +16,19 @@ import org.springframework.stereotype.Service;
 public class UserService implements IUserService{
 
     private final UserRepository userRepository;
+    private final ICartService cartService;
 
     @Override
-    public User addUser(User newUser) {
+    public User addUser(UserRequest newUser) {
         User user = new User();
         user.setFirstName(newUser.getFirstName());
-        user.setLastNAme(newUser.getLastNAme());
+        user.setLastName(newUser.getLastName());
         user.setEmail(newUser.getEmail());
         user.setPassword(newUser.getPassword());
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        Cart cart = cartService.addOrderCart(savedUser);
+        savedUser.setCart(cart);
+        return userRepository.save(savedUser);
     }
 
     @Override
@@ -30,10 +37,10 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, UserRequest user) {
         User oldUser = getUser(id);
         oldUser.setFirstName(user.getFirstName());
-        oldUser.setLastNAme(user.getLastNAme());
+        oldUser.setLastName(user.getLastName());
         oldUser.setEmail(user.getEmail());
         oldUser.setPassword(user.getPassword());
         return userRepository.save(oldUser);
@@ -41,7 +48,7 @@ public class UserService implements IUserService{
 
     @Override
     public void deleteUser(Long id) {
-        userRepository.findById(id).ifPresentOrElse(userRepository::delete, ()-> { throw new FoundException("User not founf with Id: "+id);});
+        userRepository.findById(id).ifPresentOrElse(userRepository::delete, ()-> { throw new FoundException("User not found with Id: "+id);});
     }
 }
 

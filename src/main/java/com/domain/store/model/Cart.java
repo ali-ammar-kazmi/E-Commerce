@@ -31,6 +31,7 @@ public class Cart {
     private User user;
 
     public void setTotalAmount(){
-        this.totalAmount = this.cartItems.stream().map(CartItem::getTotalPrice).reduce(BigDecimal.ZERO,BigDecimal::add);
+        this.totalAmount = this.cartItems.stream().map(CartItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

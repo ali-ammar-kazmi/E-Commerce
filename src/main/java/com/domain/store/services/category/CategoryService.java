@@ -3,20 +3,17 @@ package com.domain.store.services.category;
 import com.domain.store.exception.FoundException;
 import com.domain.store.model.Category;
 import com.domain.store.repository.CategoryRepository;
-import com.domain.store.repository.ProductRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @Service
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService{
     private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
 
     @Override
     public Category getCategoryById(Long id) {
@@ -44,7 +41,7 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Category updateCategory(String categoryName, Long id) {
-        return Optional.ofNullable(getCategoryById(id)).map(oldCategory -> {
+        return categoryRepository.findById(id).map(oldCategory -> {
             oldCategory.setName(categoryName);
             return categoryRepository.save(oldCategory);
         }).orElseThrow(()->
