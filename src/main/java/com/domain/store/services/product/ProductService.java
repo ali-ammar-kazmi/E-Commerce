@@ -28,9 +28,8 @@ public class ProductService implements IProductService{
     @Override
     public Product addProduct(ProductRequest request) {
         try {
-            Category category = Optional.ofNullable(categoryService.getCategoryByName(request.getCategoryName()))
-                    .orElseGet(()-> categoryService.addCategory(request.getCategoryName()));
-
+            String name = request.getCategoryName();
+            Category category = categoryService.addCategory(name);
             Product product = new Product();
             product.setName(request.getName());
             product.setBrand(request.getBrand());

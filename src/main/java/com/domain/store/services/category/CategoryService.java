@@ -35,7 +35,7 @@ public class CategoryService implements ICategoryService{
             categoryRepository.save(category);
             return category;
         }else{
-            throw new FoundException("Category Already Exists!");
+            return getCategoryByName(name);
         }
     }
 

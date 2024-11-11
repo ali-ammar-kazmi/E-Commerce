@@ -26,8 +26,7 @@ public class UserService implements IUserService{
         user.setEmail(newUser.getEmail());
         user.setPassword(newUser.getPassword());
         User savedUser = userRepository.save(user);
-        Cart cart = cartService.addOrderCart(savedUser);
-        savedUser.setCart(cart);
+        cartService.addOrderCart(savedUser);
         return userRepository.save(savedUser);
     }
 

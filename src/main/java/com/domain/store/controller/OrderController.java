@@ -1,7 +1,7 @@
 package com.domain.store.controller;
 
 import com.domain.store.exception.FoundException;
-import com.domain.store.model.Order;
+import com.domain.store.model.UserOrder;
 import com.domain.store.response.ApiResponse;
 import com.domain.store.services.OrderStatus;
 import com.domain.store.services.order.IOrderService;
@@ -17,12 +17,12 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @RequestMapping("${api.prefix}/order")
 public class OrderController {
 
-    private IOrderService orderService;
+    private final IOrderService orderService;
 
-    @PostMapping("/save/{userId}")
+    @GetMapping("/save/{userId}")
     public ResponseEntity<ApiResponse> placeOrder(@PathVariable Long userId){
         try{
-            Order order = orderService.placeOrder(userId);
+            UserOrder order = orderService.placeOrder(userId);
             return ResponseEntity.ok(new ApiResponse("Order Placed!", order));
         } catch ( Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
@@ -32,7 +32,7 @@ public class OrderController {
     @GetMapping("/retrieveById/{orderId}")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long orderId){
         try{
-            Order order = orderService.getOrder(orderId);
+            UserOrder order = orderService.getOrder(orderId);
             return ResponseEntity.ok(new ApiResponse("Order Found!", order));
         } catch ( FoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
@@ -44,7 +44,7 @@ public class OrderController {
     @PutMapping("/update/{orderId}/{orderStatus}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable OrderStatus orderStatus, @PathVariable Long orderId){
         try{
-            Order order = orderService.updateOrderStatus(orderId, orderStatus);
+            UserOrder order = orderService.updateOrderStatus(orderId, orderStatus);
             return ResponseEntity.ok(new ApiResponse("Order Updated!", order));
         } catch ( FoundException e){
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));

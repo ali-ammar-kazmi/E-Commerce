@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Order {
+public class UserOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

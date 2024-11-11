@@ -53,7 +53,6 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId){
         try {
             Product product = productService.getProductById(productId);
-//            ProductDto productDto = convert.convertProductToDto(product);
             return ResponseEntity.ok(new ApiResponse("Found Success!", product));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
