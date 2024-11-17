@@ -7,6 +7,7 @@ import com.domain.store.response.ApiResponse;
 import com.domain.store.services.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
@@ -19,6 +20,7 @@ public class UserController {
 
     private final IUserService userService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
     public ResponseEntity<ApiResponse> addUser(@RequestBody UserRequest user){
         try{
@@ -31,6 +33,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/retrieveById/{userId}")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId){
         try{
@@ -43,6 +46,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{userId}")
     public ResponseEntity<ApiResponse> updateCategory(@RequestBody UserRequest user, @PathVariable Long userId){
         try{
@@ -55,6 +59,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId){
         try{
