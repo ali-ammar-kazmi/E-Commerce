@@ -1,7 +1,7 @@
 package com.domain.store.services.order;
 
 import com.domain.store.model.UserOrder;
-import com.domain.store.services.OrderStatus;
+import com.domain.store.model.OrderStatus;
 
 public interface IOrderService {
     public UserOrder placeOrder(Long userId);

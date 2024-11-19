@@ -1,6 +1,5 @@
 package com.domain.store.model;
 
-import com.domain.store.services.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

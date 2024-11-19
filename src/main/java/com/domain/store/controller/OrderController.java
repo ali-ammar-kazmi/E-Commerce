@@ -3,7 +3,7 @@ package com.domain.store.controller;
 import com.domain.store.exception.FoundException;
 import com.domain.store.model.UserOrder;
 import com.domain.store.response.ApiResponse;
-import com.domain.store.services.OrderStatus;
+import com.domain.store.model.OrderStatus;
 import com.domain.store.services.order.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

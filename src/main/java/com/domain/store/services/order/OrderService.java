@@ -6,7 +6,7 @@ import com.domain.store.model.User;
 import com.domain.store.model.UserOrder;
 import com.domain.store.repository.CartItemRepository;
 import com.domain.store.repository.OrderRepository;
-import com.domain.store.services.OrderStatus;
+import com.domain.store.model.OrderStatus;
 import com.domain.store.services.user.IUserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

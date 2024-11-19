@@ -7,7 +7,7 @@ import com.domain.store.model.User;
 import com.domain.store.repository.CartItemRepository;
 import com.domain.store.repository.CartRepository;
 import com.domain.store.repository.OrderRepository;
-import com.domain.store.services.OrderStatus;
+import com.domain.store.model.OrderStatus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

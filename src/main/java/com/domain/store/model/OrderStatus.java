@@ -1,4 +1,4 @@
-package com.domain.store.services;
+package com.domain.store.model;
 
 public enum OrderStatus {
     PENDING,
