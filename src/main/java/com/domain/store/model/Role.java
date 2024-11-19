@@ -13,14 +13,16 @@ import java.util.HashSet;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "authorities")
+@Table(name = "roles")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
-    private String authority;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ERole name;
 
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users = new HashSet<>();

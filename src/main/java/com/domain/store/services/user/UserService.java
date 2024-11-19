@@ -1,9 +1,10 @@
 package com.domain.store.services.user;
 
 import com.domain.store.exception.FoundException;
+import com.domain.store.model.ERole;
 import com.domain.store.model.Role;
 import com.domain.store.model.User;
-import com.domain.store.repository.AuthorityRepository;
+import com.domain.store.repository.RoleRepository;
 import com.domain.store.repository.UserRepository;
 import com.domain.store.request.UserRequest;
 import com.domain.store.services.cart.ICartService;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class UserService implements IUserService{
 
     private final UserRepository userRepository;
-    private final AuthorityRepository authorityRepository;
+    private final RoleRepository authorityRepository;
     private final ICartService cartService;
     private final PasswordEncoder passwordEncoder;
 
@@ -31,8 +32,7 @@ public class UserService implements IUserService{
         User savedUser = userRepository.save(user);
         cartService.addOrderCart(savedUser);
         Role role = new Role();
-        role.setUsername(newUser.getUsername());
-        role.setAuthority("ROLE_" + newUser.getRole());
+        role.setName(ERole.ROLE_USER);
         authorityRepository.save(role);
         return userRepository.save(savedUser);
     }
@@ -49,8 +49,7 @@ public class UserService implements IUserService{
         oldUser.setEmail(user.getEmail());
         oldUser.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = authorityRepository.findById(id).orElseThrow(()-> new FoundException("Role not found with Id: "+id));
-        role.setUsername(user.getUsername());
-        role.setAuthority("ROLE_" + user.getRole());
+        role.setName(ERole.ROLE_USER);
         authorityRepository.save(role);
         return userRepository.save(oldUser);
     }
