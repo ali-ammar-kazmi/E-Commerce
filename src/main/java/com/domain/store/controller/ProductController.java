@@ -25,7 +25,7 @@ public class ProductController {
             Product product = productService.addProduct(productRequest);
             return ResponseEntity.ok(new ApiResponse("Save Success!", product));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Save Failed!", e.getMessage()));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Save Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -35,7 +35,7 @@ public class ProductController {
             Product product = productService.updateProduct(productRequest, productId);
             return ResponseEntity.ok(new ApiResponse("Update Success!", product));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", e.getMessage()));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -45,7 +45,7 @@ public class ProductController {
             productService.deleteProduct(productId);
             return ResponseEntity.ok(new ApiResponse("Delete Success!", null));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete Failed!", e.getMessage()));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -55,7 +55,7 @@ public class ProductController {
             Product product = productService.getProductById(productId);
             return ResponseEntity.ok(new ApiResponse("Found Success!", product));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -65,7 +65,7 @@ public class ProductController {
             List<Product> products = productService.getAllProducts();
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Found Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -75,7 +75,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByCategory(categoryName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
@@ -86,7 +86,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByBrand(brandName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
@@ -96,7 +96,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByName(productName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
@@ -106,7 +106,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByCategoryAndBrand(categoryName, brandName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
@@ -116,7 +116,7 @@ public class ProductController {
             int count = productService.countProductsByCategory(categoryName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", count));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
@@ -126,7 +126,7 @@ public class ProductController {
             List<Product> products = productService.getProductsByCategoryAndName(categoryName, productName);
             return ResponseEntity.ok(new ApiResponse("Found Success!", products));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", e.getMessage()));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 }

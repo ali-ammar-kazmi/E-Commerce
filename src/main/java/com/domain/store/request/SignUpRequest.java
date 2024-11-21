@@ -4,8 +4,10 @@ import java.util.Set;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class SignUpRequest {
     @NotBlank
     @Size(min = 3, max = 20)

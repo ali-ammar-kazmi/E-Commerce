@@ -27,8 +27,6 @@ public class ImageController {
         try{
             List<ImageConfig> images = imageService.saveImages(files, productId);
             return ResponseEntity.ok(new ApiResponse("Image Upload Success!", images));
-        } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
         } catch (Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Image Upload Failed!", e.getMessage()));
         }
@@ -57,7 +55,7 @@ public class ImageController {
                 return ResponseEntity.ok(new ApiResponse("Update Success!", updatedImage));
             }
         } catch (Exception e){
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", INTERNAL_SERVER_ERROR));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", INTERNAL_SERVER_ERROR));
     }
@@ -71,7 +69,7 @@ public class ImageController {
                 return ResponseEntity.ok(new ApiResponse("Delete Success!", null));
             }
         } catch (Exception e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Delete Failed!", NOT_FOUND));
         }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete Failed!", INTERNAL_SERVER_ERROR));
     }

@@ -2,9 +2,9 @@ package com.domain.store.services.cart;
 
 import com.domain.store.exception.FoundException;
 import com.domain.store.model.Cart;
-import com.domain.store.model.CartItem;
+import com.domain.store.model.Item;
 import com.domain.store.model.User;
-import com.domain.store.repository.CartItemRepository;
+import com.domain.store.repository.ItemRepository;
 import com.domain.store.repository.CartRepository;
 import com.domain.store.repository.OrderRepository;
 import com.domain.store.model.OrderStatus;
@@ -21,7 +21,7 @@ import java.util.Set;
 public class CartService implements ICartService{
 
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    private final ItemRepository itemRepository;
     private final OrderRepository orderRepository;
 
     @Override
@@ -46,8 +46,8 @@ public class CartService implements ICartService{
         user.getOrders().forEach(
                 order -> {
                     if (order.getOrderStatus().equals(OrderStatus.DELIVERED)){
-                        Set<CartItem> orderCartItems = order.getCartItems();
-                        orderCartItems.forEach(cartItemRepository::delete);
+                        Set<Item> orderItems = order.getItems();
+                        orderItems.forEach(itemRepository::delete);
                         orderRepository.save(order);
                     }
                 }

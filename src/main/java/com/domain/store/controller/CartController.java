@@ -1,7 +1,7 @@
 package com.domain.store.controller;
 
 import com.domain.store.model.Cart;
-import com.domain.store.model.CartItem;
+import com.domain.store.model.Item;
 import com.domain.store.response.ApiResponse;
 import com.domain.store.services.cart.CartItemService;
 import com.domain.store.services.cart.CartService;
@@ -27,7 +27,7 @@ public class CartController {
             Cart cart = cartService.getOrderCart(cartId);
             return ResponseEntity.ok(new ApiResponse("Found success!", cart));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
@@ -37,37 +37,37 @@ public class CartController {
             Cart cart = cartService.clearCart(cartId);
             return ResponseEntity.ok(new ApiResponse("Clear success!", cart));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Clear Failed!", NOT_FOUND));
         }
     }
 
     @GetMapping("/retrieveItem/{cartItemId}")
     public ResponseEntity<ApiResponse> getCartItem(@PathVariable Long cartItemId){
         try {
-            CartItem cartItem = cartItemService.getCartItem(cartItemId);
-            return ResponseEntity.ok(new ApiResponse("Found success!", cartItem));
+            Item item = cartItemService.getCartItem(cartItemId);
+            return ResponseEntity.ok(new ApiResponse("Found success!", item));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
     @GetMapping("/saveItem/cartId/{cartId}/productId/{productId}")
     public ResponseEntity<ApiResponse> addCartItem(@PathVariable Long cartId, @PathVariable Long productId){
         try {
-            CartItem cartItem = cartItemService.addItemToCart(cartId, productId);
-            return ResponseEntity.ok(new ApiResponse("Save success!", cartItem));
+            Item item = cartItemService.addItemToCart(cartId, productId);
+            return ResponseEntity.ok(new ApiResponse("Save success!", item));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Save Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
     @PutMapping("/update/cartItem/{cartItemId}/quantity/{quantity}")
     public ResponseEntity<ApiResponse> updateCartItem(@PathVariable Long cartItemId, @PathVariable int quantity){
         try {
-            CartItem cartItem = cartItemService.updateQuantity(cartItemId, quantity);
-            return ResponseEntity.ok(new ApiResponse("Update success!", cartItem));
+            Item item = cartItemService.updateQuantity(cartItemId, quantity);
+            return ResponseEntity.ok(new ApiResponse("Update success!", item));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Update Failed!", NOT_FOUND));
         }
     }
 
@@ -77,7 +77,7 @@ public class CartController {
             cartItemService.deleteCartItem(cartItemId);
             return ResponseEntity.ok(new ApiResponse("Delete success!", null));
         } catch (Exception e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Delete Failed!", NOT_FOUND));
         }
     }
 }

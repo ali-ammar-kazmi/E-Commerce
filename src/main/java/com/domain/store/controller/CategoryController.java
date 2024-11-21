@@ -24,7 +24,7 @@ public class CategoryController {
             List<Category> categories = categoryService.getAllCategories();
             return ResponseEntity.ok(new ApiResponse("Found All!", categories));
         } catch ( Exception e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Found Failed!", NOT_FOUND));
         }
     }
 
@@ -33,10 +33,8 @@ public class CategoryController {
         try{
             Category category = categoryService.addCategory(categoryName);
             return ResponseEntity.ok(new ApiResponse("Category Added!", category));
-        } catch ( FoundException e){
-            return ResponseEntity.status(FOUND).body(new ApiResponse(e.getMessage(), FOUND));
         } catch ( Exception e){
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Save Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -46,9 +44,7 @@ public class CategoryController {
             Category category = categoryService.getCategoryById(categoryId);
             return ResponseEntity.ok(new ApiResponse("Category Found!", category));
         } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
-        } catch ( Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Category Not Found!", NOT_FOUND));
         }
     }
 
@@ -58,9 +54,7 @@ public class CategoryController {
             Category category = categoryService.getCategoryByName(categoryName);
             return ResponseEntity.ok(new ApiResponse("Category Found!", category));
         } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
-        } catch ( Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Category Not Found!", NOT_FOUND));
         }
     }
 
@@ -70,9 +64,7 @@ public class CategoryController {
             Category category = categoryService.updateCategory(categoryName, categoryId);
             return ResponseEntity.ok(new ApiResponse("Category Updated!", category));
         } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
-        } catch ( Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Update Failed!", NOT_FOUND));
         }
     }
 
@@ -82,9 +74,7 @@ public class CategoryController {
             categoryService.deleteCategory(categoryId);
             return ResponseEntity.ok(new ApiResponse("Category Deleted!", null));
         } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
-        } catch ( Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Delete Failed!", NOT_FOUND));
         }
     }
 }

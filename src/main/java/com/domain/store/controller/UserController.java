@@ -20,16 +20,13 @@ public class UserController {
 
     private final IUserService userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse> addUser(@RequestBody UserRequest user){
+    public ResponseEntity<ApiResponse> addUser(@RequestBody UserRequest userRequest){
         try{
-            User newUser = userService.addUser(user);
-            return ResponseEntity.ok(new ApiResponse("User Added!", newUser));
-        } catch ( FoundException e){
-            return ResponseEntity.status(FOUND).body(new ApiResponse(e.getMessage(), FOUND));
+            User user = userService.addUser(userRequest);
+            return ResponseEntity.ok(new ApiResponse("User Added!", user));
         } catch ( Exception e){
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Save Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -40,22 +37,22 @@ public class UserController {
             User user = userService.getUser(userId);
             return ResponseEntity.ok(new ApiResponse("User Found!", user));
         } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("User Not Found!", NOT_FOUND));
         } catch ( Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("User Not Found!", INTERNAL_SERVER_ERROR));
         }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{userId}")
-    public ResponseEntity<ApiResponse> updateCategory(@RequestBody UserRequest user, @PathVariable Long userId){
+    public ResponseEntity<ApiResponse> updateCategory(@RequestBody UserRequest userRequest, @PathVariable Long userId){
         try{
-            User updatedUser = userService.updateUser(userId, user);
+            User updatedUser = userService.updateUser(userId, userRequest);
             return ResponseEntity.ok(new ApiResponse("User Updated!", updatedUser));
         } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("User Not Updated!", NOT_FOUND));
         } catch ( Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("User Not Updated!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -66,9 +63,9 @@ public class UserController {
             userService.deleteUser(userId);
             return ResponseEntity.ok(new ApiResponse("User Deleted!", null));
         } catch ( FoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("User Not Deleted!", NOT_FOUND));
         } catch ( Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("User Not Deleted!", INTERNAL_SERVER_ERROR));
         }
     }
 }

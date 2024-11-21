@@ -3,8 +3,8 @@ package com.domain.store.services.order;
 import com.domain.store.exception.FoundException;
 import com.domain.store.model.Cart;
 import com.domain.store.model.User;
-import com.domain.store.model.UserOrder;
-import com.domain.store.repository.CartItemRepository;
+import com.domain.store.model.Order;
+import com.domain.store.repository.ItemRepository;
 import com.domain.store.repository.OrderRepository;
 import com.domain.store.model.OrderStatus;
 import com.domain.store.services.user.IUserService;
@@ -22,34 +22,34 @@ public class OrderService implements IOrderService {
 
     private final OrderRepository orderRepository;
     private final IUserService userService;
-    private final CartItemRepository cartItemRepository;
+    private final ItemRepository itemRepository;
 
     @Transactional
     @Override
-    public UserOrder placeOrder(Long userId) {
+    public Order placeOrder(Long userId) {
         User user = userService.getUser(userId);
         Cart cart = user.getCart();
-        UserOrder order = new UserOrder();
+        Order order = new Order();
         order.setOrderAmount(cart.getTotalAmount());
         order.setOrderStatus(OrderStatus.PLACED);
         order.setOrderDateTime(LocalDateTime.now());
         order.setUser(user);
-        cart.getCartItems().forEach(cartItem -> {
+        cart.getItems().forEach(cartItem -> {
             cartItem.setOrder(order);
             cartItem.setCart(null);
-            cartItemRepository.save(cartItem);
+            itemRepository.save(cartItem);
         });
         return orderRepository.save(order);
     }
 
     @Override
-    public UserOrder getOrder(Long id) {
+    public Order getOrder(Long id) {
         return orderRepository.findById(id).orElseThrow(()-> new FoundException("Order not found with Id: "+id));
     }
 
     @Override
-    public UserOrder updateOrderStatus(Long id, OrderStatus status) {
-        UserOrder order = getOrder(id);
+    public Order updateOrderStatus(Long id, OrderStatus status) {
+        Order order = getOrder(id);
         order.setOrderStatus(status);
         return orderRepository.save(order);
     }

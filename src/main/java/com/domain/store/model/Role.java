@@ -11,8 +11,8 @@ import java.util.HashSet;
 
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
+@Entity
 @Table(name = "roles")
 public class Role {
 
@@ -21,7 +21,6 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
     private ERole name;
 
     @ManyToMany(mappedBy = "roles")

@@ -29,7 +29,7 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public Category addCategory(String name) {
-        if (!categoryRepository.existsByName(name)){
+        if (categoryRepository.findByName(name).isEmpty()){
             Category category = new Category();
             category.setName(name);
             categoryRepository.save(category);

@@ -23,7 +23,7 @@ public class Cart {
 
     @OneToMany(mappedBy= "cart", cascade= CascadeType.ALL, orphanRemoval= true)
     @JsonManagedReference
-    private Set<CartItem> cartItems;
+    private Set<Item> items;
 
     @OneToOne
     @JoinColumn
@@ -31,7 +31,7 @@ public class Cart {
     private User user;
 
     public void setTotalAmount(){
-        this.totalAmount = this.cartItems.stream().map(CartItem::getTotalPrice)
+        this.totalAmount = this.items.stream().map(Item::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

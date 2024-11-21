@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @Entity
-public class CartItem {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class CartItem {
     @ManyToOne
     @JoinColumn
     @JsonBackReference
-    private UserOrder order;
+    private Order order;
 
     public void setPrice() {
         this.unitPrice = this.product.getPrice();

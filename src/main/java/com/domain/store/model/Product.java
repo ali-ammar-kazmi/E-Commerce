@@ -36,5 +36,5 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
     @JsonBackReference
-    private List<CartItem> cartItem;
+    private List<Item> item;
 }
