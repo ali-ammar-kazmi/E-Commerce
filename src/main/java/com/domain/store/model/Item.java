@@ -34,7 +34,7 @@ public class Item {
     @ManyToOne
     @JoinColumn
     @JsonBackReference
-    private Order order;
+    private Orders order;
 
     public void setPrice() {
         this.unitPrice = this.product.getPrice();

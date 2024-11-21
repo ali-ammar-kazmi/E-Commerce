@@ -24,11 +24,11 @@ public class UserService implements IUserService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User addUser(UserRequest newUser) {
+    public User addUser(UserRequest userRequest) {
         User user = new User();
-        user.setUsername(newUser.getUsername());
-        user.setEmail(newUser.getEmail());
-        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         User savedUser = userRepository.save(user);
         cartService.addOrderCart(savedUser);
         Role role = new Role();
@@ -49,7 +49,12 @@ public class UserService implements IUserService{
         oldUser.setEmail(user.getEmail());
         oldUser.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = authorityRepository.findById(id).orElseThrow(()-> new FoundException("Role not found with Id: "+id));
-        role.setName(ERole.ROLE_USER);
+
+        switch (user.getRole()) {
+            case "user" -> role.setName(ERole.ROLE_USER);
+            case "admin" -> role.setName(ERole.ROLE_ADMIN);
+            case "moderator" -> role.setName(ERole.ROLE_MODERATOR);
+        }
         authorityRepository.save(role);
         return userRepository.save(oldUser);
     }
