@@ -1,8 +1,8 @@
-package com.domain.store.security.jwt;
+package com.domain.store.services.jwt;
 
 import java.io.IOException;
 
-import com.domain.store.security.services.UserDetailsServiceImpl;
+import com.domain.store.services.user.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

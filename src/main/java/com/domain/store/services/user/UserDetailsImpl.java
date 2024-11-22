@@ -1,6 +1,5 @@
-package com.domain.store.security.services;
+package com.domain.store.services.user;
 
-import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -15,22 +14,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Component;
 
-@Component
 @Data
 public class UserDetailsImpl implements UserDetails {
-  @Serial
-  private static final long serialVersionUID = 1L;
 
-  private Long id;
-  private String username;
-  private String email;
+  private final String username;
+  private final String email;
+
   @JsonIgnore
-  private String password;
-  private Collection<? extends GrantedAuthority> authorities;
+  private final String password;
+  private final Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(Long id, String username, String email, String password,
+  public UserDetailsImpl(String username, String email, String password,
       Collection<? extends GrantedAuthority> authorities) {
-    this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
@@ -43,7 +38,6 @@ public class UserDetailsImpl implements UserDetails {
         .collect(Collectors.toList());
 
     return new UserDetailsImpl(
-        user.getId(), 
         user.getUsername(), 
         user.getEmail(),
         user.getPassword(), 
@@ -72,6 +66,6 @@ public class UserDetailsImpl implements UserDetails {
     if (o == null || getClass() != o.getClass())
       return false;
     UserDetailsImpl user = (UserDetailsImpl) o;
-    return Objects.equals(id, user.id);
+    return Objects.equals(email, user.email);
   }
 }

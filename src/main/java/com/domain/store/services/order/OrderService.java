@@ -7,7 +7,7 @@ import com.domain.store.model.Orders;
 import com.domain.store.repository.ItemRepository;
 import com.domain.store.repository.OrderRepository;
 import com.domain.store.model.OrderStatus;
-import com.domain.store.security.services.IUserService;
+import com.domain.store.services.user.IUserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

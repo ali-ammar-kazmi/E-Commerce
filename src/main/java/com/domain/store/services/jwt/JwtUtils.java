@@ -1,9 +1,9 @@
-package com.domain.store.security.jwt;
+package com.domain.store.services.jwt;
 
 import java.security.Key;
 import java.util.Date;
 
-import com.domain.store.security.services.UserDetailsImpl;
+import com.domain.store.services.user.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

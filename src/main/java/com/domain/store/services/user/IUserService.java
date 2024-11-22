@@ -1,4 +1,4 @@
-package com.domain.store.security.services;
+package com.domain.store.services.user;
 
 import com.domain.store.model.User;
 import com.domain.store.request.SignUpRequest;

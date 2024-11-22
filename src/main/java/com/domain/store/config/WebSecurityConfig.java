@@ -1,9 +1,8 @@
-package com.domain.store.security;
+package com.domain.store.config;
 
-import com.domain.store.repository.UserRepository;
-import com.domain.store.security.jwt.AuthEntryPointJwt;
-import com.domain.store.security.jwt.AuthTokenFilter;
-import com.domain.store.security.services.UserDetailsServiceImpl;
+import com.domain.store.services.jwt.AuthEntryPointJwt;
+import com.domain.store.services.jwt.AuthTokenFilter;
+import com.domain.store.services.user.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

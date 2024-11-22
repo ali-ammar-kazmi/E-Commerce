@@ -1,9 +1,10 @@
-package com.domain.store.security.services;
+package com.domain.store.services.user;
 
 
 import com.domain.store.model.User;
 import com.domain.store.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

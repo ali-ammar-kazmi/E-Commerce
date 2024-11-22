@@ -1,4 +1,4 @@
-package com.domain.store.security.jwt;
+package com.domain.store.services.jwt;
 
 import java.io.IOException;
 import java.util.HashMap;
