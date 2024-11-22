@@ -3,8 +3,8 @@ package com.domain.store.services.item;
 import com.domain.store.model.Item;
 
 public interface IItemService {
-    public Item addItemToCart(Long cartId, Long productId);
-    public Item getCartItem(Long id);
-    public Item updateQuantity(Long id, int quantity);
-    public void deleteCartItem(Long id);
+    Item addItemToCart(Long cartId, Long productId);
+    Item getCartItem(Long id);
+    Item updateQuantity(Long id, int quantity);
+    void deleteCartItem(Long id);
 }

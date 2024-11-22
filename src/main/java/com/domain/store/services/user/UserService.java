@@ -26,6 +26,24 @@ public class UserService implements IUserService{
     private final ICartService cartService;
     private final PasswordEncoder passwordEncoder;
 
+    public User addUser(SignUpRequest signUpRequest){
+        if (userRepository.findByUsername(signUpRequest.getUsername()).isPresent()) {
+            throw new StoreException("User Already Exists with name "+ signUpRequest.getUsername());
+        }
+        // Create new user's account
+        User user = new User();
+        user.setUsername(signUpRequest.getUsername());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+
+        Set<String> strRoles = signUpRequest.getRoles();
+        Set<Role> roles = convertStrToRole(strRoles);
+        user.setRoles(roles);
+
+        cartService.addCart(user);
+        return userRepository.save(user);
+    }
+
     @Override
     public User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(()-> new StoreException("User not found with Id: "+id));
@@ -38,6 +56,18 @@ public class UserService implements IUserService{
         oldUser.setEmail(user.getEmail());
 
         Set<String> strRoles = user.getRoles();
+        Set<Role> roles = convertStrToRole(strRoles);
+        oldUser.setRoles(roles);
+        return userRepository.save(oldUser);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.findById(id).ifPresentOrElse(userRepository::delete, ()-> { throw new StoreException("User not found with Id: "+id);});
+    }
+
+    private Set<Role> convertStrToRole(Set<String> strRoles){
+
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
@@ -54,7 +84,7 @@ public class UserService implements IUserService{
 
                         break;
                     case "mod":
-                        Role modRole = roleRepository.findByName(ERole.MODERATOR)
+                        Role modRole = roleRepository.findByName(ERole.CONTRIBUTOR)
                                 .orElseThrow(() -> new StoreException("Error: Role is not found."));
                         roles.add(modRole);
 
@@ -66,14 +96,7 @@ public class UserService implements IUserService{
                 }
             });
         }
-        oldUser.setRoles(roles);
-        return userRepository.save(oldUser);
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        roleRepository.findById(id).ifPresentOrElse(roleRepository::delete, ()-> { throw new StoreException("Role not found with Id: "+id);});
-        userRepository.findById(id).ifPresentOrElse(userRepository::delete, ()-> { throw new StoreException("User not found with Id: "+id);});
+        return roles;
     }
 }
 
