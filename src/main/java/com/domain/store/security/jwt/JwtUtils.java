@@ -16,12 +16,13 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
+
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-  @Value("${jwt.secret}")
+  @Value("${jwt.token.secret:mySecretKeySecretKeySecret}")
   private String jwtSecret;
 
-  @Value("${jwt.expirationInMils}")
+  @Value("${jwt.token.expirationInMils:3600000}")
   private int jwtExpirationMs;
 
   public String generateJwtToken(Authentication authentication) {
