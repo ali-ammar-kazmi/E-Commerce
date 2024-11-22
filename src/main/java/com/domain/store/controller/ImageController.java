@@ -1,8 +1,8 @@
 package com.domain.store.controller;
 
-import com.domain.store.exception.FoundException;
+import com.domain.store.exception.StoreException;
 import com.domain.store.model.ImageConfig;
-import com.domain.store.response.ApiResponse;
+import com.domain.store.response.StoreResponse;
 import com.domain.store.services.image.IImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -23,12 +23,12 @@ public class ImageController {
     private final IImageService imageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId){
+    public ResponseEntity<StoreResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId){
         try{
             List<ImageConfig> images = imageService.saveImages(files, productId);
-            return ResponseEntity.ok(new ApiResponse("Image Upload Success!", images));
+            return ResponseEntity.ok(new StoreResponse("Image Upload Success!", images));
         } catch (Exception e){
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Image Upload Failed!", e.getMessage()));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new StoreResponse("Image Upload Failed!", INTERNAL_SERVER_ERROR));
         }
     }
 
@@ -39,7 +39,7 @@ public class ImageController {
             ByteArrayResource resource = new ByteArrayResource(image.getImage().getImage().getBytes(1, (int) image.getImage().getImage().length()));
             return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"").body(resource);
-        } catch ( FoundException e){
+        } catch ( StoreException e){
             return ResponseEntity.status(NOT_FOUND).body(null);
         } catch (Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(null);
@@ -47,30 +47,30 @@ public class ImageController {
     }
 
     @PutMapping("/update/{imageId}")
-    public ResponseEntity<ApiResponse> updateImage(@RequestParam MultipartFile file, @PathVariable Long imageId){
+    public ResponseEntity<StoreResponse> updateImage(@RequestParam MultipartFile file, @PathVariable Long imageId){
         try{
             ImageConfig image = imageService.getImageById(imageId);
             if (image != null){
                 ImageConfig updatedImage = imageService.updateImage(file, imageId);
-                return ResponseEntity.ok(new ApiResponse("Update Success!", updatedImage));
+                return ResponseEntity.ok(new StoreResponse("Update Success!", updatedImage));
             }
         } catch (Exception e){
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new StoreResponse("Update Failed!", INTERNAL_SERVER_ERROR));
         }
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update Failed!", INTERNAL_SERVER_ERROR));
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new StoreResponse("Update Failed!", INTERNAL_SERVER_ERROR));
     }
 
     @DeleteMapping("/delete/{imageId}")
-    public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId){
+    public ResponseEntity<StoreResponse> deleteImage(@PathVariable Long imageId){
         try{
             ImageConfig image = imageService.getImageById(imageId);
             if (image != null){
                 imageService.deleteImage(imageId);
-                return ResponseEntity.ok(new ApiResponse("Delete Success!", null));
+                return ResponseEntity.ok(new StoreResponse("Delete Success!", null));
             }
         } catch (Exception e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Delete Failed!", NOT_FOUND));
+            return ResponseEntity.status(NOT_FOUND).body(new StoreResponse("Delete Failed!", NOT_FOUND));
         }
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete Failed!", INTERNAL_SERVER_ERROR));
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new StoreResponse("Delete Failed!", INTERNAL_SERVER_ERROR));
     }
 }

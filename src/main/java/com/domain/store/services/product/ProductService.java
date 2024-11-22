@@ -1,6 +1,6 @@
 package com.domain.store.services.product;
 
-import com.domain.store.exception.FoundException;
+import com.domain.store.exception.StoreException;
 import com.domain.store.model.Category;
 import com.domain.store.model.Product;
 import com.domain.store.repository.ProductRepository;
@@ -21,7 +21,7 @@ public class ProductService implements IProductService{
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(()-> new FoundException("Product Not Found with id: "+ id));
+                .orElseThrow(()-> new StoreException("Product Not Found with id: "+ id));
     }
 
     @Override
@@ -38,12 +38,12 @@ public class ProductService implements IProductService{
             product.setCategory(category);
             return productRepository.save(product);
         } catch (Exception e) {
-            throw new FoundException("Product Not Added!");
+            throw new StoreException("Product Not Added!");
         }
     }
 
     @Override
-    public Product updateProduct(ProductRequest request, long id) {
+    public Product updateProduct(long id, ProductRequest request) {
         return productRepository.findById(id)
                 .map((existingProduct) -> {
                     existingProduct.setName(request.getName());
@@ -55,13 +55,13 @@ public class ProductService implements IProductService{
                     existingProduct.setCategory(category);
                     return productRepository.save(existingProduct);
                 })
-                .orElseThrow(()-> new FoundException("Product Not Found with id: "+ id));
+                .orElseThrow(()-> new StoreException("Product Not Found with id: "+ id));
     }
 
     @Override
     public void deleteProduct(long id) {
         productRepository.findById(id)
-                .ifPresentOrElse(productRepository::delete, ()-> {throw new FoundException("Product Not Found with id: "+ id);});
+                .ifPresentOrElse(productRepository::delete, ()-> {throw new StoreException("Product Not Found with id: "+ id);});
     }
 
     @Override

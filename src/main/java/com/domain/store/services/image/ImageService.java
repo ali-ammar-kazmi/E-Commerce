@@ -1,6 +1,6 @@
 package com.domain.store.services.image;
 
-import com.domain.store.exception.FoundException;
+import com.domain.store.exception.StoreException;
 import com.domain.store.model.Image;
 import com.domain.store.model.ImageConfig;
 import com.domain.store.model.Product;
@@ -21,12 +21,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ImageService implements IImageService{
+
     private final ImageConfigRepository imageConfigRepository;
     private final ProductService productService;
 
     @Override
     public ImageConfig getImageById(Long id) {
-        return imageConfigRepository.findById(id).orElseThrow(()-> new FoundException("Image Not Found with id: "+ id));
+        return imageConfigRepository.findById(id).orElseThrow(()-> new StoreException("Image Not Found with id: "+ id));
     }
 
     @Override
@@ -39,14 +40,14 @@ public class ImageService implements IImageService{
             image.setImage(new SerialBlob(file.getBytes()));
             imageConfig.setImage(image);
             return imageConfigRepository.save(imageConfig);
-        } catch (IOException | SQLException | FoundException e){
-            throw new FoundException(e.getMessage());
+        } catch (IOException | SQLException | StoreException e){
+            throw new StoreException(e.getMessage());
         }
     }
 
     @Override
     public void deleteImage(Long id) {
-        imageConfigRepository.findById(id).ifPresentOrElse(imageConfigRepository::delete, ()-> {throw new FoundException("Image Not Found with id: " + id);});
+        imageConfigRepository.findById(id).ifPresentOrElse(imageConfigRepository::delete, ()-> {throw new StoreException("Image Not Found with id: " + id);});
     }
 
     @Override

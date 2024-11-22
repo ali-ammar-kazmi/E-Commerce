@@ -1,13 +1,13 @@
 package com.domain.store.services.order;
 
-import com.domain.store.exception.FoundException;
+import com.domain.store.exception.StoreException;
 import com.domain.store.model.Cart;
 import com.domain.store.model.User;
 import com.domain.store.model.Orders;
 import com.domain.store.repository.ItemRepository;
 import com.domain.store.repository.OrderRepository;
 import com.domain.store.model.OrderStatus;
-import com.domain.store.services.user.IUserService;
+import com.domain.store.security.services.IUserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public Orders getOrder(Long id) {
-        return orderRepository.findById(id).orElseThrow(()-> new FoundException("Order not found with Id: "+id));
+        return orderRepository.findById(id).orElseThrow(()-> new StoreException("Order not found with Id: "+id));
     }
 
     @Override
